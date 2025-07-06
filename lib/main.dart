@@ -35,18 +35,45 @@ class ExamPage extends StatefulWidget {
 }
 
 class _ExamPageState extends State<ExamPage> {
+List<Padding> answerResult =[];
+List <String> questions =[
+  'عدد الكواكب في المجموعة الشمسية هو ثمانية كواكب',
+  'القطط هي حيوانات اليفة',
+  'الصين موجودة في القارة الأفريقية',
+  'الأرض مسطحه وليست كروية',
+  ];
+List <String> questionsImage =[
+  'images/image-1.jpg',
+  'images/image-2.jpg',
+  'images/image-3.jpg',
+  'images/image-4.jpg',
+];
+
+List <bool> answers =[
+  true,
+  true,
+  false,
+  false,
+];
+
+  int questionsNumber = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Row(
+          children: answerResult,          
+          
+        ),
         Expanded(
             flex: 5,
           child: Column(
             children: [
-              Image.asset('images/image-1.jpg'),
+              Image.asset(questionsImage[questionsNumber]),
               SizedBox(height: 20.0),
-              Text('عدد الكواكب في المجموعة الشمسية هو ثمانية كواكب',
+              Text(
+                questions[questionsNumber],
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24.0,
@@ -55,7 +82,7 @@ class _ExamPageState extends State<ExamPage> {
             ],
           )
           ),
-          Expanded(
+        Expanded(
             
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -72,12 +99,21 @@ class _ExamPageState extends State<ExamPage> {
                 ),
                 ),
                 onPressed: (){
-              
+                  bool correctAnswer = answers[questionsNumber];
+                  if(correctAnswer == true) {
+                    print('اجابة صحيحة');
+                  } else{
+                    print('اجابة خاطئة ');
+                  }
+                  setState(() {
+                  questionsNumber ++;    
+                  });
+                  
                 },
               ),
             ),
             ),
-             Expanded(
+        Expanded(
             
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -94,7 +130,19 @@ class _ExamPageState extends State<ExamPage> {
                 ),
                 ),
                 onPressed: (){
-              
+                 
+                  bool correctAnswer = answers[questionsNumber];
+                  if(correctAnswer == false) {
+                    print('اجابة صحيحة');
+                  } else{
+                    print('اجابة خاطئة ');
+                  }
+                 
+                 
+                  setState(() {
+                  questionsNumber ++;    
+                  });
+                
                 },
               ),
             ),
