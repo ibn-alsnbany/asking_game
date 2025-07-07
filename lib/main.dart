@@ -1,5 +1,7 @@
-import 'package:asking_game/question.dart';
 import 'package:flutter/material.dart';
+import 'app_brain.dart';
+
+AppBrain appBrain = AppBrain();
 
 void main() {
   runApp(const ExamApp());
@@ -28,42 +30,31 @@ class ExamPage extends StatefulWidget {
 }
 
 class _ExamPageState extends State<ExamPage> {
-  List<Padding> answerResult = [];
-  // List<String> questions = [
-  //   'عدد الكواكب في المجموعة الشمسية هو ثمانية كواكب',
-  //   'القطط هي حيوانات اليفة',
-  //   'الصين موجودة في القارة الأفريقية',
-  //   'الأرض مسطحه وليست كروية',
-  // ];
-  // List<String> questionsImage = [
-  //   'images/image-1.jpg',
-  //   'images/image-2.jpg',
-  //   'images/image-3.jpg',
-  //   'images/image-4.jpg',
-  // ];
+  List<Widget> answerResult = [];
 
-  // List<bool> answers = [true, true, false, false];
-  List<Question> questionGroup = [
-    Question(
-      q: 'عدد الكواكب في المجموعة الشمسية هو ثمانية كواكب',
-      i: 'images/image-1.jpg',
-      a: true,
-    ),
-    Question(q: 'القطط هي حيوانات اليفة', i: 'images/image-2.jpg', a: true),
-    Question(
-      q: 'الصين موجودة في القارة الأفريقية',
-      i: 'images/image-3.jpg',
-      a: false,
-    ),
-    Question(q: 'الأرض مسطحه وليست كروية', i: 'images/image-4.jpg', a: false),
-  ];
-  Question question1 = Question(
-    q: 'عدد الكواكب في المجموعة الشمسية هو ثمانية كواكب',
-    i: 'images/image-1.jpg',
-    a: true,
-  );
+  void checkAnswer(bool whatUserPicked) {
+    bool correctAnswer = appBrain.getQuestionAnswer();
+    setState(() {
+      if (whatUserPicked == correctAnswer) {
+        answerResult.add(
+          Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Icon(Icons.thumb_up, color: Colors.green),
+          ),
+        );
+      } else {
+        answerResult.add(
+          Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Icon(Icons.thumb_down, color: Colors.red),
+          ),
+        );
+      }
 
-  int questionsNumber = 0;
+      appBrain.nextQuestion();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -74,10 +65,10 @@ class _ExamPageState extends State<ExamPage> {
           flex: 5,
           child: Column(
             children: [
-              Image.asset(questionGroup[questionsNumber].questionImage),
+              Image.asset(appBrain.getQuestionImage()),
               SizedBox(height: 20.0),
               Text(
-                questionGroup[questionsNumber].questionText,
+                appBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24.0),
               ),
@@ -97,18 +88,7 @@ class _ExamPageState extends State<ExamPage> {
                 style: TextStyle(fontSize: 20.0, color: Colors.white),
               ),
               onPressed: () {
-                bool correctAnswer =
-                    questionGroup[questionsNumber].questionAnswer;
-                if (correctAnswer == true) {
-                  print('اجابة صحيحة');
-                  print(question1.questionText);
-                  print(question1.questionImage);
-                } else {
-                  print('اجابة خاطئة ');
-                }
-                setState(() {
-                  questionsNumber++;
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -126,17 +106,7 @@ class _ExamPageState extends State<ExamPage> {
                 style: TextStyle(fontSize: 20.0, color: Colors.white),
               ),
               onPressed: () {
-                bool correctAnswer =
-                    questionGroup[questionsNumber].questionAnswer;
-                if (correctAnswer == false) {
-                  print('اجابة صحيحة');
-                } else {
-                  print('اجابة خاطئة ');
-                }
-
-                setState(() {
-                  questionsNumber++;
-                });
+                checkAnswer(false);
               },
             ),
           ),
