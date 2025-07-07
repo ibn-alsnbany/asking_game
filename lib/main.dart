@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 AppBrain appBrain = AppBrain();
 
@@ -31,11 +32,13 @@ class ExamPage extends StatefulWidget {
 
 class _ExamPageState extends State<ExamPage> {
   List<Widget> answerResult = [];
+  int rightAnswers = 0;
 
   void checkAnswer(bool whatUserPicked) {
     bool correctAnswer = appBrain.getQuestionAnswer();
     setState(() {
       if (whatUserPicked == correctAnswer) {
+        rightAnswers++;
         answerResult.add(
           Padding(
             padding: const EdgeInsets.all(3.0),
@@ -51,7 +54,31 @@ class _ExamPageState extends State<ExamPage> {
         );
       }
 
-      appBrain.nextQuestion();
+      if (appBrain.isFinshed() == true) {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "انتعاء الاختبار",
+          desc: "لقد أجبت على $rightAnswersأسئلة صحيحة من 7أسئلة",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ابدء من جديد",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            ),
+          ],
+        ).show();
+        appBrain.reset();
+
+        answerResult = [];
+
+        rightAnswers = 0;
+      } else {
+        appBrain.nextQuestion();
+      }
     });
   }
 

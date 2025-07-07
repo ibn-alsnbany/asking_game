@@ -44,4 +44,16 @@ class AppBrain {
   bool getQuestionAnswer() {
     return _questionGroup[_questionsNumber].questionAnswer;
   }
+
+  bool isFinshed() {
+    if (_questionsNumber >= _questionGroup.length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void reset() {
+    _questionsNumber = 0;
+  }
 }
